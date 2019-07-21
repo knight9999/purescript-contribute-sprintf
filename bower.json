@@ -1,0 +1,33 @@
+{
+  "name": "purescript-contribute-sprintf",
+  "homepage": "https://github.com/knight9999/purescript-contribute-sprintf",
+  "description": "sprintf-like formatting in purescript",
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/knight9999/purescript-contribute-sprintf.git"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "purescript-prelude": "^4.1.0",
+    "purescript-console": "^4.2.0",
+    "purescript-typelevel-prelude": "^5.0.0",
+    "purescript-effect": "^2.0.1",
+    "purescript-strings": "^4.0.1",
+    "purescript-numbers": "^6.0.0",
+    "purescript-type-isequal": "^0.1.0"
+  },
+  "devDependencies": {
+    "purescript-assert": "^4.0.0",
+    "purescript-psci-support": "^4.0.0"
+  },
+  "resolutions": {
+    "purescript-typelevel-prelude": "^5.0.0"
+  }
+}
