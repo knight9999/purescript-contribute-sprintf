@@ -11,15 +11,15 @@ import Test.Assert (assertEqual')
 testConst :: Effect Unit
 testConst = do
   log "--- Test Sprintf Const ---"
-  assertEqual' "Check Sprintf \"\"" {
+  assertEqual' "Empty: Check Sprintf \"\"" {
     expected : "",
     actual : sprintf (SProxy :: SProxy "")
   }
-  assertEqual' "Check Sprintf \"Hello World\"" {
+  assertEqual' "Hello World: Check Sprintf \"Hello World\"" {
     expected : "Hello World",
     actual : sprintf (SProxy :: SProxy "Hello World")
   }
-  assertEqual' "Check Sprintf \"%%\"" {
+  assertEqual' "Escape: Check Sprintf \"%%\"" {
     expected : "%",
     actual : sprintf (SProxy :: SProxy "%%")
   }
@@ -27,7 +27,7 @@ testConst = do
 testInt :: Effect Unit
 testInt = do
   log "--- Test Sprintf Int ---"
-  assertEqual' "The value = 5" {
+  assertEqual' "sprintf \"The value = %d\" 5" {
     expected : "The value = 5",
     actual : sprintf (SProxy :: SProxy "The value = %d") 5
   }
@@ -38,4 +38,20 @@ testInt = do
   assertEqual' "%d%%Hello(%04d), 2, 5" {
     expected : "2%Hello(0005)",
     actual : sprintf (SProxy :: SProxy "%d%%Hello(%04d)") 2 5
+  }
+  assertEqual' "%d%%Hello(%+4d), 2, 5" {
+    expected : "2%Hello(  +5)",
+    actual : sprintf (SProxy :: SProxy "%d%%Hello(%+4d)") 2 5
+  }
+
+testFloat :: Effect Unit
+testFloat = do
+  log "--- Test Sprintf Float ---"
+  assertEqual' "sptrinf \"The value = %f\" 1.0" {
+      expected : "The value = 1.000000",
+      actual : sprintf (SProxy :: SProxy "The value = %f") 1.0
+  }
+  assertEqual' "sptrinf \"The value = %.2f\" 2.1" {
+      expected : "The value = 2.10",
+      actual : sprintf (SProxy :: SProxy "The value = %.2f") 2.1
   }
