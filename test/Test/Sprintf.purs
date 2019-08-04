@@ -1,7 +1,6 @@
 module Test.Sprintf where
   
-import Prelude (Unit, discard)
-
+import Prelude (Unit, discard, negate)
 import Effect (Effect)
 import Effect.Console (log)
 import Data.Contribute.Sprintf
@@ -31,6 +30,10 @@ testInt = do
     expected : "The value = 5",
     actual : sprintf (SProxy :: SProxy "The value = %d") 5
   }
+  assertEqual' "sprintf \"The value = %+ d\" 5" {
+    expected : "The value =  5",
+    actual : sprintf (SProxy :: SProxy "The value = %+ d") 5
+  }
   assertEqual' "%d%%Hello(%4d), 2, 5" {
     expected : "2%Hello(   5)",
     actual : sprintf (SProxy :: SProxy "%d%%Hello(%4d)") 2 5
@@ -39,9 +42,17 @@ testInt = do
     expected : "2%Hello(0005)",
     actual : sprintf (SProxy :: SProxy "%d%%Hello(%04d)") 2 5
   }
+  assertEqual' "%d%%Hello(%04d), 2, -5" {
+    expected : "2%Hello(-005)",
+    actual : sprintf (SProxy :: SProxy "%d%%Hello(%04d)") 2 (-5)
+  }
   assertEqual' "%d%%Hello(%+4d), 2, 5" {
     expected : "2%Hello(  +5)",
     actual : sprintf (SProxy :: SProxy "%d%%Hello(%+4d)") 2 5
+  }
+  assertEqual' "%d%%Hello(%+4d), 2, -5" {
+    expected : "2%Hello(  -5)",
+    actual : sprintf (SProxy :: SProxy "%d%%Hello(%+4d)") 2 (-5)
   }
 
 testFloat :: Effect Unit
@@ -51,7 +62,7 @@ testFloat = do
       expected : "The value = 1.000000",
       actual : sprintf (SProxy :: SProxy "The value = %f") 1.0
   }
-  assertEqual' "sptrinf \"The value = %.2f\" 2.1" {
+  assertEqual' "sptrinf \"The value = %.2f\" 2.1" { 
       expected : "The value = 2.10",
       actual : sprintf (SProxy :: SProxy "The value = %.2f") 2.1
   }

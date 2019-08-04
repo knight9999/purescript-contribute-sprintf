@@ -1,11 +1,11 @@
 module NumReader where
 
-import Prelude (identity, (<>), show)
+-- import Prelude (identity, (<>), show)
 import Type.Prelude (class IsSymbol, SProxy(..), reflectSymbol)
 import Prim.Symbol as Symbol
 import Prim.Boolean (kind Boolean, True, False)
-import Data.Int
-import Data.Maybe
+import Data.Int (fromString)
+import Data.Maybe (Maybe)
 
 class IsNumChar (str :: Symbol)  (result :: Boolean) | str -> result
 instance isNumChar0 :: IsNumChar "0" True

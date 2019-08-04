@@ -3,7 +3,7 @@ sprintf
 , class Sprintf
 , class FormatF
 , formatF
-, FProxy
+, FProxy (..)
 , class Parse
 , class Match
 , class ParseParam
@@ -30,6 +30,7 @@ sprintf
 import Prelude (identity, negate, not, (+), (-), (<), (<>), show, (&&), (>), (>=))
 import Type.Prelude (class IsSymbol, SProxy(..), reflectSymbol)
 import Prim.Symbol as Prim.Symbol
+-- import Prim.Boolean (kind Boolean, True, False)
 
 import NumReader (class IsNumChar, class NumParser, class NumReader, class NumReaderSub, parseNum)
 import FlagReader (class FlagParser, class FlagReader, class FlagReaderSub, class IsFlagChar, parseFlag)
@@ -49,12 +50,6 @@ instance sprintf1 ::
   , FormatF format func
   ) => Sprintf string func where
   sprintf _ = formatF (FProxy :: FProxy format) ""
-
-withSignFormat :: Boolean -> Int -> String
-withSignFormat flagSign i =
-  if (flagSign && (i > 0)) 
-    then "+" <> show i
-    else show i
 
 class FormatF (format :: FList) func | format -> func where
   formatF :: FProxy format -> String -> func
@@ -82,7 +77,7 @@ instance formatF_Int ::
         in
         \i -> formatF (FProxy :: FProxy rest) (str <> (showIntWithFormat flags' minWidth' precision' lengthModifier' i))
 
-else instance formatF_Number ::
+instance formatF_Number ::
   (
     FormatF rest restFunc
   , IsSymbol flags
@@ -102,7 +97,7 @@ else instance formatF_Number ::
         in
         \f -> formatF (FProxy :: FProxy rest) (str <> (showFloatWithFormat flags' minWidth' precision' lengthModifier' f))
 
-else instance formatF_ConsLiteral ::
+instance formatF_ConsLiteral ::
   (
     IsSymbol literal
   , FormatF rest fun
@@ -110,11 +105,9 @@ else instance formatF_ConsLiteral ::
     formatF _ str
       = formatF (FProxy :: FProxy rest) (str <> reflectSymbol (SProxy :: SProxy literal))
 
-
 mulStr :: Int -> String -> String
 mulStr 0 _ = ""
 mulStr n s = s <> (mulStr (n-1) s)
-
 
 showIntWithFormat :: { flagMinus :: Boolean, flagPlus :: Boolean, flagSpace :: Boolean, flagZero :: Boolean } -> Maybe Int -> Maybe Int -> String -> Int -> String
 showIntWithFormat flags maybeMinWidth maybePrecision lengthModifier value =
